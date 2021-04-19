@@ -1,0 +1,137 @@
+---
+title: "LMM"
+output:
+  html_document: default
+  pdf_document: default
+  word_document: default
+---
+
+```{r}
+library("ggplot2")
+library("tidyverse")
+library("lme4")
+library("lmerTest")
+#code written in part by Callin Switzer
+```
+
+
+
+
+
+
+```{r}
+
+df <- read.csv(file.choose(), stringsAsFactors = FALSE)
+
+```
+
+
+
+
+
+
+
+
+```{r}
+# plot all trials
+ggplot(df, aes(x = condition, y = first_mean_amplitude, fill = condition)) + 
+  geom_violin(alpha = 0.2) + 
+  geom_point(aes(color = as.factor(name)), 
+             position = position_dodge(width = 0.3))
+# plot all trials
+ggplot(df, aes(x = condition, y = second_mean_amplitude, fill = condition)) + 
+  geom_violin(alpha = 0.2) + 
+  geom_point(aes(color = as.factor(name)), 
+             position = position_dodge(width = 0.3))
+
+# plot all trials
+ggplot(df, aes(x = condition, y = ratio_mean_amplitude, fill = condition)) + 
+  geom_violin(alpha = 0.2) + 
+  geom_point(aes(color = as.factor(name)), 
+             position = position_dodge(width = 0.3))
+# plot all trials
+ggplot(df, aes(x = condition, y = first_val_only_amplitude, fill = condition)) + 
+  geom_violin(alpha = 0.2) + 
+  geom_point(aes(color = as.factor(name)), 
+             position = position_dodge(width = 0.3))
+```
+
+
+``` {r}
+#this is a Linear Mixed Effects Model used to look at all moths and all visits. Again the Sham condition appears significantly different from the other groups. 
+
+
+m1 <- lmer(first_mean_amplitude ~ condition + (1|name), data = df)             
+summary(m1)
+
+# Test for overall significance of treatment (measures how well the condition parameter influences the data)
+# this is called a likelihood ratio test.
+anova(m1, update(m1, .~. - condition))
+## Diagnostics
+plot(m1) # residual plot for all residuals
+## qqplot for random effects
+qqnorm(ranef(m1)$name[[1]], main="Normal Q-Q plot for random effects")
+qqline(ranef(m1)$name[[1]])
+
+
+
+```
+
+
+
+``` {r}
+#this is a Linear Mixed Effects Model used to look at all moths and all visits. Again the Sham condition appears significantly different from the other groups. 
+
+
+m2 <- lmer(second_mean_amplitude ~ condition + (1|name), data = df)             
+summary(m2)
+
+# Test for overall significance of treatment (measures how well the condition parameter influences the data)
+# this is called a likelihood ratio test.
+anova(m2, update(m2, .~. - condition))
+## Diagnostics
+plot(m2) # residual plot for all residuals
+## qqplot for random effects
+qqnorm(ranef(m2)$name[[1]], main="Normal Q-Q plot for random effects")
+qqline(ranef(m2)$name[[1]])
+```
+
+
+
+``` {r}
+#this is a Linear Mixed Effects Model used to look at all moths and all visits. Again the Sham condition appears significantly different from the other groups. 
+
+
+m3 <- lmer(ratio_mean_amplitude ~ condition + (1|name), data = df)             
+summary(m3)
+
+# Test for overall significance of treatment (measures how well the condition parameter influences the data)
+# this is called a likelihood ratio test.
+anova(m3, update(m3, .~. - condition))
+## Diagnostics
+plot(m3) # residual plot for all residuals
+## qqplot for random effects
+qqnorm(ranef(m3)$name[[1]], main="Normal Q-Q plot for random effects")
+qqline(ranef(m3)$name[[1]])
+```
+
+
+
+
+``` {r}
+#this is a Linear Mixed Effects Model used to look at all moths and all visits. Again the Sham condition appears significantly different from the other groups. 
+
+
+m4 <- lmer(first_val_only_amplitude ~ condition + (1|name), data = df)             
+summary(m4)
+
+# Test for overall significance of treatment (measures how well the condition parameter influences the data)
+# this is called a likelihood ratio test.
+anova(m4, update(m4, .~. - condition))
+## Diagnostics
+plot(m4) # residual plot for all residuals
+## qqplot for random effects
+qqnorm(ranef(m4)$name[[1]], main="Normal Q-Q plot for random effects")
+qqline(ranef(m4)$name[[1]])
+```
+
